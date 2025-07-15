@@ -16,3 +16,8 @@ export interface ProductFormData {
   category: string;
   stock: number;
 }
+
+export type ProductFormErrors = {
+  [K in keyof ProductFormData]?: string;
+};
+

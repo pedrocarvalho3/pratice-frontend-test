@@ -1,12 +1,38 @@
-import { Container, Button, Card, Table } from "react-bootstrap";
+import { Container, Button, Card, Table, Alert } from "react-bootstrap";
 import { formatPrice } from "../utils/format-price";
 import StockBadge from "../components/StockBadge";
 import { Pencil, Trash } from "lucide-react";
 import { formatDate } from "../utils/format-date";
 import { useProducts } from "../hooks/useProducts";
+import { useState } from "react";
+import type { Product, ProductFormData } from "../types";
+import ProductModal from "../components/ProductModal";
 
 const Dashboard: React.FC = () => {
-  const { products } = useProducts();
+  const { products, addProduct, updateProduct } = useProducts();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | undefined>();
+  const [alert, setAlert] = useState<{
+    type: "success" | "danger";
+    message: string;
+  } | null>(null);
+
+  const handleSaveProduct = (productData: ProductFormData) => {
+    if (selectedProduct) {
+      updateProduct(selectedProduct.id, productData);
+      showAlert("success", "Produto atualizado com sucesso!");
+    } else {
+      addProduct(productData);
+      showAlert("success", "Produto adicionado com sucesso!");
+    }
+    setSelectedProduct(undefined);
+  };
+
+  const showAlert = (type: "success" | "danger", message: string) => {
+    setAlert({ type, message });
+    setTimeout(() => setAlert(null), 5000);
+  };
+
   return (
     <Container>
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -14,12 +40,21 @@ const Dashboard: React.FC = () => {
         <Button
           variant="primary"
           size="lg"
-          onClick={() => console.log("teste")}
+          onClick={() => {
+            setSelectedProduct(undefined);
+            setShowModal(true);
+          }}
         >
           <i className="bi bi-plus-circle me-2"></i>
           Adicionar Produto
         </Button>
       </div>
+
+      {alert && (
+        <Alert variant={alert.type} dismissible onClose={() => setAlert(null)}>
+          {alert.message}
+        </Alert>
+      )}
 
       <Card>
         <Card.Body>
@@ -58,7 +93,10 @@ const Dashboard: React.FC = () => {
                       <Button
                         variant="outline-primary"
                         size="sm"
-                        onClick={() => console.log("ola")}
+                        onClick={() => {
+                          setSelectedProduct(product);
+                          setShowModal(true);
+                        }}
                       >
                         <Pencil />
                       </Button>
@@ -77,6 +115,13 @@ const Dashboard: React.FC = () => {
           </Table>
         </Card.Body>
       </Card>
+
+      <ProductModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        product={selectedProduct}
+        onSave={handleSaveProduct}
+      />
     </Container>
   );
 };

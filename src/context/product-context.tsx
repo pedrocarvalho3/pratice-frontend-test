@@ -5,6 +5,7 @@ import { initialProducts } from "../mocks/products";
 interface ProductContextType {
   products: Product[];
   addProduct: (product: ProductFormData) => void;
+  updateProduct: (id: number, product: ProductFormData) => void;
 }
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
@@ -18,8 +19,28 @@ const ProductProvider: React.FC<{ children: React.ReactNode }> = ({
     setProducts(initialProducts);
   }, []);
 
+  const addProduct = (productData: ProductFormData) => {
+    const newProduct: Product = {
+      id: Math.floor(100 + Math.random() * 900),
+      ...productData,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    setProducts((prev) => [...prev, newProduct]);
+  };
+
+  const updateProduct = (id: number, productData: ProductFormData) => {
+    setProducts((prev) =>
+      prev.map((product) =>
+        product.id === id
+          ? { ...product, ...productData, updatedAt: new Date() }
+          : product
+      )
+    );
+  };
+
   return (
-    <ProductContext.Provider value={{ products }}>
+    <ProductContext.Provider value={{ products, addProduct, updateProduct }}>
       {children}
     </ProductContext.Provider>
   );
