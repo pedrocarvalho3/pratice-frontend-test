@@ -1,15 +1,9 @@
 import React from "react";
 import { Card, Badge } from "react-bootstrap";
 import type { Product } from "../types";
+import { formatPrice } from "../utils/format-price";
 
 const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(price);
-  };
-
   const getStockBadge = (stock: number) => {
     if (stock === 0) return <Badge bg="danger">Esgotado</Badge>;
     if (stock < 10) return <Badge bg="warning">Baixo Estoque</Badge>;
