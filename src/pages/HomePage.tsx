@@ -1,4 +1,4 @@
-import { Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import ProductCard from "../components/ProductCard";
 import { initialProducts } from "../mocks/products";
 
@@ -14,7 +14,9 @@ const HomePage: React.FC = () => {
 
       <Row>
         {initialProducts.map((product) => (
-          <ProductCard product={product} />
+          <Col key={product.id} md={6} lg={4} className="mb-4">
+            <ProductCard product={product} />
+          </Col>
         ))}
       </Row>
     </Container>
