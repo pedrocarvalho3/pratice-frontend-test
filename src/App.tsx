@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AppNavbar from "./components/AppNavBar";
 import HomePage from "./pages/HomePage";
+import Dashboard from "./pages/Dashboard";
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState("home");
@@ -8,7 +9,7 @@ const App: React.FC = () => {
   return (
     <div className="min-vh-100 bg-light pt-4">
       <AppNavbar currentPage={currentPage} onPageChange={setCurrentPage} />
-      <HomePage />
+      {currentPage === "home" ? <HomePage /> : <Dashboard />}
     </div>
   );
 };
