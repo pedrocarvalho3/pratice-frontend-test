@@ -7,11 +7,15 @@ import { useProducts } from "../hooks/useProducts";
 import { useState } from "react";
 import type { Product, ProductFormData } from "../types";
 import ProductModal from "../components/ProductModal";
+import DeleteModal from "../components/DeleteModal";
 
 const Dashboard: React.FC = () => {
-  const { products, addProduct, updateProduct } = useProducts();
+  const { products, addProduct, updateProduct, deleteProduct } = useProducts();
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | undefined>();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [productToDelete, setProductToDelete] = useState<Product | undefined>();
+
   const [alert, setAlert] = useState<{
     type: "success" | "danger";
     message: string;
@@ -26,6 +30,15 @@ const Dashboard: React.FC = () => {
       showAlert("success", "Produto adicionado com sucesso!");
     }
     setSelectedProduct(undefined);
+  };
+
+  const handleDeleteProduct = () => {
+    if (productToDelete) {
+      deleteProduct(productToDelete.id);
+      showAlert("success", "Produto excluído com sucesso!");
+      setProductToDelete(undefined);
+      setShowDeleteModal(false);
+    }
   };
 
   const showAlert = (type: "success" | "danger", message: string) => {
@@ -103,7 +116,10 @@ const Dashboard: React.FC = () => {
                       <Button
                         variant="outline-danger"
                         size="sm"
-                        onClick={() => console.log("teste")}
+                        onClick={() => {
+                          setProductToDelete(product);
+                          setShowDeleteModal(true);
+                        }}
                       >
                         <Trash />
                       </Button>
@@ -121,6 +137,13 @@ const Dashboard: React.FC = () => {
         onHide={() => setShowModal(false)}
         product={selectedProduct}
         onSave={handleSaveProduct}
+      />
+
+      <DeleteModal
+        show={showDeleteModal}
+        onHide={() => setShowDeleteModal(false)}
+        onDelete={handleDeleteProduct}
+        product={productToDelete}
       />
     </Container>
   );

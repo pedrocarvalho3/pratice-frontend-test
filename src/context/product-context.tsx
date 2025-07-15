@@ -6,6 +6,7 @@ interface ProductContextType {
   products: Product[];
   addProduct: (product: ProductFormData) => void;
   updateProduct: (id: number, product: ProductFormData) => void;
+  deleteProduct: (id: number) => void;
 }
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
@@ -39,8 +40,14 @@ const ProductProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   };
 
+  const deleteProduct = (id: number) => {
+    setProducts((prev) => prev.filter((product) => product.id !== id));
+  };
+
   return (
-    <ProductContext.Provider value={{ products, addProduct, updateProduct }}>
+    <ProductContext.Provider
+      value={{ products, addProduct, updateProduct, deleteProduct }}
+    >
       {children}
     </ProductContext.Provider>
   );
