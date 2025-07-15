@@ -1,9 +1,11 @@
-function App() {
-  return (
-    <>
-      <h1>Hello World</h1>
-    </>
-  )
-}
+import HomePage from "./pages/HomePage";
 
-export default App
+const App: React.FC = () => {
+  return (
+    <div className="min-vh-100 bg-light pt-4">
+      <HomePage />
+    </div>
+  );
+};
+
+export default App;
