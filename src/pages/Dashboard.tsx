@@ -1,14 +1,12 @@
 import { Container, Button, Card, Table } from "react-bootstrap";
 import { formatPrice } from "../utils/format-price";
-import { initialProducts } from "../mocks/products";
 import StockBadge from "../components/StockBadge";
 import { Pencil, Trash } from "lucide-react";
+import { formatDate } from "../utils/format-date";
+import { useProducts } from "../hooks/useProducts";
 
 const Dashboard: React.FC = () => {
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat("pt-BR").format(date);
-  };
-
+  const { products } = useProducts();
   return (
     <Container>
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -38,7 +36,7 @@ const Dashboard: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {initialProducts.map((product) => (
+              {products.map((product) => (
                 <tr key={product.id}>
                   <td>{product.id}</td>
                   <td>
