@@ -1,21 +1,15 @@
-import React from "react";
-import { Card, Badge } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import type { Product } from "../types";
 import { formatPrice } from "../utils/format-price";
+import StockBadge from "./StockBadge";
 
 const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
-  const getStockBadge = (stock: number) => {
-    if (stock === 0) return <Badge bg="danger">Esgotado</Badge>;
-    if (stock < 10) return <Badge bg="warning">Baixo Estoque</Badge>;
-    return <Badge bg="success">Disponível</Badge>;
-  };
-
   return (
     <Card className="h-100 shadow-sm">
       <Card.Body>
         <Card.Title className="d-flex justify-content-between align-items-start">
           {product.name}
-          {getStockBadge(product.stock)}
+          <StockBadge stock={product.stock} />
         </Card.Title>
         <Card.Subtitle className="mb-2 text-muted">
           {product.category}
